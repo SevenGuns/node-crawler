@@ -130,7 +130,7 @@ async function start([startX, startY]) { // [x, y]存档位置
     } while (loop);
     console.log('结束');
 }
-// 记录已经成功的
+
 async function find(url) {
     let i = 0;
     const loopFetch = () => { // 防止丢包 自动重试
@@ -186,7 +186,7 @@ function macth(content = '') { // 匹配函数
 }
 
 
-function isNumber(param) { // 校验匹配的数据
+function isNumber(param) { // 校验匹配到的数据
     let str = param;
     const n = str.slice(-1);
     if (n === '万') {
