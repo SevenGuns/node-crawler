@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const cheerio = require('cheerio');
 
-class DataList {
+class DataList { // 封装数据操作，持久化
     constructor() {
         const self = this;
         self.path = 'data.json';
@@ -14,7 +14,7 @@ class DataList {
             });
         })
     }
-    connect() {
+    connect() { // 读取存档，获得当前位置
         const self = this;
         return self.promiseData.then(list => {
             if (list.length === 0) {
@@ -27,7 +27,7 @@ class DataList {
             return [x, y];
         })
     }
-    save(list) {
+    save(list) { // 保存
         const self = this;
         return new Promise((rs) => {
             fs.writeFile(self.path, JSON.stringify(list || self.sourceDataList), (err) => {
@@ -36,11 +36,7 @@ class DataList {
             });
         })
     }
-    nextPage() {
-        this.sourceDataList.push([]);
-        return this.sourceDataList.length - 1;
-    }
-    push(pageIndex, data) {
+    push(pageIndex, data) { // 添加数据，自动处理翻页
         const self = this;
         const page = self.sourceDataList[pageIndex];
         if (!page) {
@@ -49,14 +45,8 @@ class DataList {
         }
         page.push(data);
     }
-    
-    read() { // 获取当前下标以及最后读取的城市
-        const self = this;
-        const length = self.sourceDataList.length;
-       
-    }
 
-    print() {
+    print() { // 打印结果
         const list = this.sourceDataList.reduce((prev, curr) => prev.concat(curr));
         return new Promise((rs) => {
             fs.writeFile('list.json', JSON.stringify(list), (err) => {
@@ -66,7 +56,7 @@ class DataList {
         })
     }
 }
-function curl(url) {
+function curl(url) { // 封装请求函数
     return new Promise((rs) => {
         try {
             http.get(url, (res) => {
@@ -88,7 +78,7 @@ function curl(url) {
 }
 
 
-async function start([startX, startY]) {
+async function start([startX, startY]) { // [x, y]存档位置
     console.log('开始');
     const origin = 'http://tjj.hunan.gov.cn/tjfx/tjgb/xqtjgb/';
     let loop = true;
@@ -100,13 +90,13 @@ async function start([startX, startY]) {
         const html = await curl(url);
         const $ = cheerio.load(html);
         const list = [];
-        $('.ccenter > a').each((i, element) => {
-            if (i < y) {
+        $('.ccenter > a').each((i, element) => { // 列表数据
+            if (i < y) { // 从存档位置开始
                 return;
             }
             const title = element.childNodes[0].data;
             const year = (title.match(/\d+年/) || [])[0];
-            if (year !== '2017年') {
+            if (year !== '2017年') { // 截止到2017年 跳出循环
                 loop = false;
                 return;
             }
@@ -118,12 +108,12 @@ async function start([startX, startY]) {
                 city
             });
         });
-        if (list.length === 0) { // 说明有可能没有取到数据 所以继续访问当前页面
+        if (list.length === 0) { // 列表爬取失败 自动重试
             continue;
         }
         for (let obj of list) {
             let num;
-            const emptyCity = new Set(['娄星区', '赫山区', '北塔区']);
+            const emptyCity = new Set(['娄星区', '赫山区', '北塔区']); // 白名单
             if (emptyCity.has(obj.city)) {
                 num = '没有记录';
             } else {
@@ -135,7 +125,7 @@ async function start([startX, startY]) {
                 num
             });
         }
-        page = dataList.nextPage(); // 翻页
+        page++; // 翻页
         y = 0; // y清0
     } while (loop);
     console.log('结束');
@@ -143,10 +133,10 @@ async function start([startX, startY]) {
 // 记录已经成功的
 async function find(url) {
     let i = 0;
-    const loopFetch = () => {
+    const loopFetch = () => { // 防止丢包 自动重试
         return curl(url).then(html => {
             const $ = cheerio.load(html);
-            const content = $('#d_article').eq(0).text();
+            const content = $('#d_article').eq(0).text(); // 目标文档内容
             if (content) {
                 return content;
             }
@@ -164,13 +154,13 @@ async function find(url) {
     try {
         return macth(content);
     } catch(e) {
-        console.error(e.toString(), url);
-        throw e;
+        console.error(e.toString(), url); // 打印目标 方便校准
+        throw e; // 抛出异常 停止爬虫 人工干预校准
     }
 }
 
 
-function macth(content = '') {
+function macth(content = '') { // 匹配函数
     const regexs = [
         /(?<=常住人口)\d+(\.\d+)?万(?=人)/,
         /(?<=常住人口为)\d+(\.\d+)?万(?=人)/,
@@ -192,11 +182,11 @@ function macth(content = '') {
             return str;
         }    
     }
-    throw new Error('匹配失败');
+    throw new Error('匹配失败'); // 匹配失败: 说明匹配函数需要校准
 }
 
 
-function isNumber(param) {
+function isNumber(param) { // 校验匹配的数据
     let str = param;
     const n = str.slice(-1);
     if (n === '万') {
@@ -206,6 +196,8 @@ function isNumber(param) {
 }
 
 const dataList = new DataList();
-dataList.connect().then(start).then(() => dataList.print()).finally(() => {
-    dataList.save();
-});
+dataList
+    .connect() // 读取存档
+    .then(start) // 开始爬虫
+    .then(() => dataList.print()) // 打印输出
+    .finally(() => dataList.save()); // 自动保存当前进度
