@@ -97,7 +97,8 @@ search(yes, right)->throw(bottom)->save(bottom)->pause(bottom)->adjust(bottom)->
 - 数据分页爬取，使用二维数组存储
 - 校验匹配结果准确性
 
-```flow
+<!-- flow
+
 s=>start: 开始
 o=>operation: 爬虫
 e=>end: 结束
@@ -119,7 +120,8 @@ isover(no)->ispageover
 ispageover(yes)->next(right)->zero->page
 ispageover(no)->plus->resolve
 ismacth(no)->exception
-```
+
+-->
 
 ![](./20190107191405.png?v=2)
 
