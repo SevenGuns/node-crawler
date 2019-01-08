@@ -115,9 +115,6 @@ ismacth(no)->exception
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。 
-    // 悬停以查看现有属性的描述。
-    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         
@@ -126,7 +123,6 @@ ismacth(no)->exception
             "request": "launch",
             "name": "启动程序",
             "program": "${workspaceFolder}/index.js",
-            // node debug 运行时
             "runtimeExecutable": "${env:HOME}/.nvm/versions/node/v8.11.1/bin/node" 
         }
     ]
