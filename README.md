@@ -1,6 +1,4 @@
 # node_reptile
-一个node的爬虫程序，从各县区统计公报中，抓取2017年各县区常住人口总数。
-
 这里只用了[cheerio](https://github.com/cheeriojs/cheerio)，我是想把爬虫的一般流程抽象出来，以满足更多业务场景的需求。
 
 ### 适用场景
