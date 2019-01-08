@@ -1,4 +1,10 @@
 {
+  "name": "node-crawler",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=8.11.1",
+    "npm": ">=6.4.1"
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2"
   }
