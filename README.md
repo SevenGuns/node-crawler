@@ -1,6 +1,4 @@
 # node_reptile
-一个node的爬虫程序，从各县区统计公报中，抓取2017年各县区常住人口总数。
-
 这里只用了[cheerio](https://github.com/cheeriojs/cheerio)，我是想把爬虫的一般流程抽象出来，以满足更多业务场景的需求。
 
 ### 适用场景
@@ -117,9 +115,6 @@ ismacth(no)->exception
 
 ```json
 {
-    // 使用 IntelliSense 了解相关属性。 
-    // 悬停以查看现有属性的描述。
-    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         
@@ -128,7 +123,6 @@ ismacth(no)->exception
             "request": "launch",
             "name": "启动程序",
             "program": "${workspaceFolder}/index.js",
-            // node debug 运行时
             "runtimeExecutable": "${env:HOME}/.nvm/versions/node/v8.11.1/bin/node" 
         }
     ]
@@ -148,4 +142,8 @@ ismacth(no)->exception
 
 #### 用python会更好一些
 
+<<<<<<< HEAD
 一是框架更成熟，支持也更广泛;二是语法更适合
+=======
+一是框架更成熟，支持也更广泛；二是语法更适合
+>>>>>>> d430e38711e767ffc2a7516af5a07964b4eefed5
