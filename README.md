@@ -37,30 +37,53 @@ node index.js
 - 人工干预校准
 - 打印输出结果
 
-```flow
+
+
+<!-- flow
+
 st=>start: 开始
+
 e=>end: 结束
+
 open=>operation: 启动
+
 read=>inputoutput: 读档
+
 lo=>subroutine: 获取爬虫位置
+
 crawl=>operation: 爬虫流程:>#爬虫流程
+
 search=>condition: 捕获到异常?
+
 throw=>inputoutput: 抛出异常
+
 save=>inputoutput: 存档
+
 pause=>operation: 停止爬虫
+
 adjust=>operation: 人工干预
+
 change=>subroutine: 调整匹配算法
+
 isover=>condition: 爬取完毕?
+
 print=>inputoutput: 打印输出结果
+
 save2=>inputoutput: 存档
 
-st->open->read->lo->crawl->search
-search(no)->isover
-isover(yes)->save2->print->e
-isover(no)->crawl
-search(yes, right)->throw(bottom)->save(bottom)->pause(bottom)->adjust(bottom)->change(right)->open
 
-```
+
+st->open->read->lo->crawl->search
+
+search(no)->isover
+
+isover(yes)->save2->print->e
+
+isover(no)->crawl
+
+search(yes, right)->throw(bottom)->save(bottom)->pause(bottom)->adjust(bottom)->change(right)->open 
+
+ -->
 
 ![](./WX20190107-191605@2x.png)
 
